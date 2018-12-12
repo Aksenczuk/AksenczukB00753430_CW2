@@ -49,6 +49,7 @@ def selection():
 def func_1_3_4_7(num):
     count = len(CONTENTS)
     over_salary = 0
+    check1 = True
 
     if num == 1:
         print("Number of records read from file:", count)
@@ -57,7 +58,13 @@ def func_1_3_4_7(num):
         total_salary = 0
 
         if num == 7:
-            over_salary = int(input("Over what salary threshold would you like employees to be shown? "))
+            over_salary = input("Over what salary threshold would you like employees to be shown? ")
+            try:
+                if int(over_salary) == over_salary:
+                    check1 = True
+            except ValueError:
+                check1 = False
+                print("You must enter an integer")
 
         for i in range(len(CONTENTS)):  # Splits the contents of CONTENTS to get the salary of each employee
             split_salary = CONTENTS[i]  # and changed the type of the variable from list to int
@@ -67,10 +74,11 @@ def func_1_3_4_7(num):
             salary = int(string_salary)
 
             if num == 7:
-                if salary > over_salary:  # displays the name & salary of employees who earn about the inserted threshold
-                    # str_salary = str(salary)
-                    # salary_contents = [i for i in CONTENTS if str_salary in i]
-                    print(s_ename+": "+str(salary))
+                if check1 is True:
+                    if salary > over_salary:  # displays the name & salary of employees who earn about the inserted threshold
+                        # str_salary = str(salary)
+                        # salary_contents = [i for i in CONTENTS if str_salary in i]
+                        print(s_ename+": "+str(salary))
             else:
                 total_salary += salary
 
@@ -182,24 +190,32 @@ def func_5():
 
 def func_9():
     deleted = 0
-    user_emp = int(input("Enter the employee number of the employee you wish to delete: "))
-    emp_no = "%03d" % user_emp  # Makes sure the emp_id has 3 digits
+    check1 = True
+    try:
+        user_emp = int(input("Enter the employee number of the employee you wish to delete: "))
+        check1 = True
+    except ValueError:
+        check1 = False
+        print("You must enter an integer")
 
-    for i in range(len(CONTENTS)):  # Goes through the list to compare the user input to the emp_id's
-        emp_list = CONTENTS[i]
-        s_empno = emp_list.split(',')[0:1]
-        string_empno = ''.join(s_empno)
-        if emp_no == string_empno:  # Compares user input to CONTENTS' emp_id's
-            print(emp_list)
-            check = input('Are you sure you want to delete this employee? (Y/N): ').lower()
-            if check == 'y':
-                del CONTENTS[int(user_emp) - 1]  # Deletes the employee from the list CONTENTS
-                deleted = 1
-                break
-    if deleted == 0:  # If user input is not in the list CONTENTS
-        if user_emp not in CONTENTS:
-            print('This employee number does not exist on this system')
-    selection()
+    if check1 is True:
+        emp_no = "%03d" % user_emp  # Makes sure the emp_id has 3 digits
+
+        for i in range(len(CONTENTS)):  # Goes through the list to compare the user input to the emp_id's
+            emp_list = CONTENTS[i]
+            s_empno = emp_list.split(',')[0:1]
+            string_empno = ''.join(s_empno)
+            if emp_no == string_empno:  # Compares user input to CONTENTS' emp_id's
+                print(emp_list)
+                check = input('Are you sure you want to delete this employee? (Y/N): ').lower()
+                if check == 'y':
+                    del CONTENTS[int(user_emp) - 1]  # Deletes the employee from the list CONTENTS
+                    deleted = 1
+                    break
+        if deleted == 0:  # If user input is not in the list CONTENTS
+            if user_emp not in CONTENTS:
+                print('This employee number does not exist on this system')
+        selection()
     # Delete based on emp no?
     # Delete based on name? (2 ppl could have the same name)
     # Delete based on index
